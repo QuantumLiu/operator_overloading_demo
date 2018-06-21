@@ -9,17 +9,17 @@ import re
 P_IM=r'([-+]?[0-9]*\.?[0-9]*)i[+-]*?'
 P_REAL=r'([-+]?[0-9]*\.?[0-9]*)[^i]'
 class Complex():
-    def __init__(self,x='',cpxpair=()):
-        if cpxpair:
-            if len(cpxpair)==1 and isinstance(cpxpair[0],(int,float)):
-                self.real_num,self.real_str,self.im_num,self.im_str=float(cpxpair[0]),str(float(cpxpair[0])),0.0,'0.0'
-            elif len(cpxpair)==2 and all(map(lambda s:isinstance(s,(int,float)),cpxpair)):
-                self.real_num,self.real_str,self.im_num,self.im_str=float(cpxpair[0]),str(float(cpxpair[0])),float(cpxpair[1]),str(float(cpxpair[1]))
+    def __init__(self,x='',ri_pair=()):
+        if ri_pair:
+            if len(ri_pair)==1 and isinstance(ri_pair[0],(int,float)):
+                self.real_num,self.real_str,self.im_num,self.im_str=float(ri_pair[0]),str(float(ri_pair[0])),0.0,'0.0'
+            elif len(ri_pair)==2 and all(map(lambda s:isinstance(s,(int,float)),ri_pair)):
+                self.real_num,self.real_str,self.im_num,self.im_str=float(ri_pair[0]),str(float(ri_pair[0])),float(ri_pair[1]),str(float(ri_pair[1]))
             else:
-                raise ValueError('cpxpaur must be a tuple or list of two numbers!')
+                raise ValueError('ri_pair must be a tuple or list that has two numbers!')
         else:
             if isinstance(x,(int,float)):
-                self=Complex(cpxpair=(x,0))
+                self=Complex(ri_pair=(x,0))
             elif isinstance(x,str):
                 self.x=re.sub(r'[^\d+-i]','',x)
                 self.im_str,self.real_str=re.findall(P_IM,self.x)[0],re.findall(P_REAL,self.x)[0]
@@ -43,9 +43,9 @@ class Complex():
         if isinstance(x,str):
             cpx=Complex(x)
         elif isinstance(x,(float,int)):
-            cpx=Complex(cpxpair=(x,))
+            cpx=Complex(ri_pair=(x,))
         elif isinstance(x,tuple):
-            cpx==Complex(cpxpair=x)
+            cpx==Complex(ri_pair=x)
         elif isinstance(x,Complex):
             cpx=x
         else:
@@ -57,21 +57,21 @@ class Complex():
         重载+
         '''
         cpx=self._covertinst(x)
-        return Complex(cpxpair=(self.real_num+cpx.real_num,self.im_num+cpx.im_num))
+        return Complex(ri_pair=(self.real_num+cpx.real_num,self.im_num+cpx.im_num))
     
     def __sub__(self,x):
         '''
         重载-
         '''
         cpx=self._covertinst(x)
-        return Complex(cpxpair=(self.real_num-cpx.real_num,self.im_num-cpx.im_num))
+        return Complex(ri_pair=(self.real_num-cpx.real_num,self.im_num-cpx.im_num))
         
     def __mul__(self,x):
         '''
         重载*
         '''
         cpx=self._covertinst(x)
-        return Complex(cpxpair=(self.real_num*cpx.real_num-self.im_num*cpx.im_num,self.im_num*cpx.real_num+self.real_num*cpx.im_num))
+        return Complex(ri_pair=(self.real_num*cpx.real_num-self.im_num*cpx.im_num,self.im_num*cpx.real_num+self.real_num*cpx.im_num))
 
     def __truediv__(self,x):
         '''
@@ -80,7 +80,7 @@ class Complex():
         cpx=self._covertinst(x)
         m=self.__add__(cpx)
         d=cpx.real_num**2+cpx.im_num**2
-        return Complex(cpxpair=(m.real_num/d,m.im_num/d))
+        return Complex(ri_pair=(m.real_num/d,m.im_num/d))
     
     def __rtruediv__(self,x):
         '''
