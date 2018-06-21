@@ -9,19 +9,21 @@ import re
 P_IM=r'([-+]?[0-9]*\.?[0-9]*)i[+-]*?'
 P_REAL=r'([-+]?[0-9]*\.?[0-9]*)[^i]'
 class Complex():
-    def __init__(self,x='',ri_pair=()):
-        if ri_pair:
-            if len(ri_pair)==1 and isinstance(ri_pair[0],(int,float)):
+    def __init__(self,ri_pair=()):
+        if isinstance(ri_pair,(tuple,list)):
+            if len(ri_pair)==1:
+                assert isinstance(ri_pair[0],(int,float))
                 self.real_num,self.real_str,self.im_num,self.im_str=float(ri_pair[0]),str(float(ri_pair[0])),0.0,'0.0'
-            elif len(ri_pair)==2 and all(map(lambda s:isinstance(s,(int,float)),ri_pair)):
+            elif len(ri_pair)==2:
+                assert all(map(lambda s:isinstance(s,(int,float)),ri_pair))
                 self.real_num,self.real_str,self.im_num,self.im_str=float(ri_pair[0]),str(float(ri_pair[0])),float(ri_pair[1]),str(float(ri_pair[1]))
             else:
                 raise ValueError('ri_pair must be a tuple or list that has two numbers!')
         else:
-            if isinstance(x,(int,float)):
-                self=Complex(ri_pair=(x,0))
-            elif isinstance(x,str):
-                self.x=re.sub(r'[^\d+-i]','',x)
+            if isinstance(ri_pair,(int,float)):
+                self=Complex(ri_pair=(ri_pair,0))
+            elif isinstance(ri_pair,str):
+                self.x=re.sub(r'[^\d+-i]','',ri_pair)#Sub meaning less chars.
                 self.im_str,self.real_str=re.findall(P_IM,self.x)[0],re.findall(P_REAL,self.x)[0]
                 if not self.im_str:
                     self.im_num=0
