@@ -114,3 +114,5 @@ if __name__=='__main__':
     print(c6)
     c7=c6+c4*c3-c2+c1*4
     print(c7)
+    c8=Complex((10,5))
+    print(c8)
